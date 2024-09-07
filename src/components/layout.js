@@ -1,47 +1,54 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/how-to/querying-data/use-static-query/
- */
+// src/components/Layout.js
+import React from "react"
+import { Link } from "gatsby"
+import Seo from "./seo"
 
-import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
-
-import Header from "./header"
-import "./layout.css"
-
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
-
+const Layout = ({
+  children,
+  pageTitle,
+  pageDescription,
+  pagePath,
+  pageImage,
+  article,
+}) => {
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: `var(--size-content)`,
-          padding: `var(--size-gutter)`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `var(--space-5)`,
-            fontSize: `var(--font-sm)`,
-          }}
-        >
-          © {new Date().getFullYear()} &middot; Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
+      <Seo
+        title={pageTitle}
+        description={pageDescription}
+        pathname={pagePath}
+        image={pageImage}
+        article={article}
+      />
+      <div className="min-h-screen flex flex-col bg-gray-100">
+        <header className="bg-white shadow-md">
+          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex justify-between items-center">
+              <Link to="/" className="text-2xl font-bold text-gray-800">
+                RapidRead Blog
+              </Link>
+              <div className="space-x-4">
+                <Link to="/" className="text-gray-600 hover:text-gray-800">
+                  Home
+                </Link>
+                {/* <Link to="/about" className="text-gray-600 hover:text-gray-800">
+                About
+              </Link>
+              <Link to="/contact" className="text-gray-600 hover:text-gray-800">
+                Contact
+              </Link> */}
+              </div>
+            </div>
+          </nav>
+        </header>
+        <main className="flex-grow">{children}</main>
+        <footer className="bg-gray-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p className="text-center">
+              &copy; {new Date().getFullYear()} RapidRead.io. All rights
+              reserved.
+            </p>
+          </div>
         </footer>
       </div>
     </>

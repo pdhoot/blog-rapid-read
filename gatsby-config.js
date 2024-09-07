@@ -9,10 +9,13 @@
  */
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
-    siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    defaultTitle: `RapidRead`,
+    titleTemplate: `%s | RapidRead`,
+    defaultDescription: `Get daily insights with RapidRead, an AI-powered news feed tailored for CXOs, Founders, and Sales Leaders. Now, stay ahead of industry trends with customized content.`,
+    siteUrl: `https://rapidread.io`,
+    defaultImage: `/images/default-og-image.jpg`,
+    twitterUsername: `@rapidread`,
+    author: `Punit Dhoot`,
   },
   plugins: [
     `gatsby-plugin-image`,
@@ -28,16 +31,25 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `RapidRead Blog`,
+        short_name: `RapidRead`,
         start_url: `/`,
-        background_color: `#663399`,
+        background_color: `#ffffff`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
         // theme_color: `#663399`,
+        theme_color: `#007BFF`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/RapidRead logo 2.png`, // Make sure this favicon exists
       },
     },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
+    },
+    "gatsby-plugin-postcss",
   ],
 }
