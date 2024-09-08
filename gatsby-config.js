@@ -35,9 +35,6 @@ module.exports = {
         short_name: `RapidRead`,
         start_url: `/`,
         background_color: `#ffffff`,
-        // This will impact how browsers show your PWA/website
-        // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#663399`,
         theme_color: `#007BFF`,
         display: `minimal-ui`,
         icon: `src/images/RapidRead logo 2.png`, // Make sure this favicon exists
@@ -51,5 +48,51 @@ module.exports = {
       },
     },
     "gatsby-plugin-postcss",
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        query: `
+          {
+            allSitePage {
+              nodes {
+                path
+              }
+            }
+            allContentfulBlogPost {
+              nodes {
+                slug
+                updatedAt
+              }
+            }
+          }
+        `,
+        resolveSiteUrl: () => `https://rapidread.io`,
+        resolvePages: ({
+          allSitePage: { nodes: allPages },
+          allContentfulBlogPost: { nodes: allPosts },
+        }) => {
+          const postPages = allPosts.map(post => {
+            return {
+              path: `/blog/${post.slug}`,
+              lastmod: post.updatedAt,
+            }
+          })
+
+          const otherPages = allPages
+            .filter(page => !page.path.startsWith("/blog/"))
+            .map(page => {
+              return { ...page }
+            })
+
+          return [...postPages, ...otherPages]
+        },
+        serialize: ({ path, lastmod }) => {
+          return {
+            url: path,
+            lastmod: lastmod,
+          }
+        },
+      },
+    },
   ],
 }

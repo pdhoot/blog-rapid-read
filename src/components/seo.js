@@ -29,6 +29,10 @@ function Seo({ description, title, children }) {
   return (
     <>
       <title>{defaultTitle ? `${title} | ${defaultTitle}` : title}</title>
+      <meta
+        name="google-site-verification"
+        content="IrffBqjInRhqeSRaWNA01GF-4AflEfLSVpmctnyLoY0"
+      />
       <meta name="description" content={metaDescription} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={metaDescription} />
