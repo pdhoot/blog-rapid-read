@@ -81,6 +81,12 @@ module.exports = {
               }
             })
 
+          // Add blog homepage
+          pages.push({
+            path: "/",
+            lastmod: new Date().toISOString(),
+          })
+
           // Remove duplicates
           const uniquePages = Array.from(
             new Map(pages.map(page => [page.path, page])).values()
