@@ -1,18 +1,9 @@
-/**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/
- */
-
-/**
- * @type {import('gatsby').GatsbyConfig}
- */
 module.exports = {
   siteMetadata: {
     defaultTitle: `RapidRead`,
     titleTemplate: `%s | RapidRead`,
     defaultDescription: `Get daily insights with RapidRead, an AI-powered news feed tailored for CXOs, Founders, and Sales Leaders. Now, stay ahead of industry trends with customized content.`,
-    siteUrl: `https://rapidread.io`,
+    siteUrl: `https://rapidread.io/blog`, // Correct blog base URL
     defaultImage: `/images/default-og-image.jpg`,
     twitterUsername: `@rapidread`,
     author: `Punit Dhoot`,
@@ -37,7 +28,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#007BFF`,
         display: `minimal-ui`,
-        icon: `src/images/RapidRead logo 2.png`, // Make sure this favicon exists
+        icon: `src/images/RapidRead logo 2.png`, // Ensure this favicon exists
       },
     },
     {
@@ -66,25 +57,36 @@ module.exports = {
             }
           }
         `,
-        resolveSiteUrl: () => `https://rapidread.io`,
+        resolveSiteUrl: () => `https://rapidread.io/blog`, // Set the correct site URL
         resolvePages: ({
           allSitePage: { nodes: allPages },
           allContentfulBlogPost: { nodes: allPosts },
         }) => {
-          const postPages = allPosts.map(post => {
-            return {
-              path: `/blog/${post.slug}`,
-              lastmod: post.updatedAt,
-            }
-          })
+          // Create a Map of all blog post slugs to their updated dates
+          const blogPostMap = new Map(
+            allPosts.map(post => [post.slug, post.updatedAt])
+          )
 
-          const otherPages = allPages
-            .filter(page => !page.path.startsWith("/blog/"))
+          // Process all pages
+          const pages = allPages
+            .filter(page => page.path !== "/") // Exclude homepage
             .map(page => {
-              return { ...page }
+              const path = page.path.endsWith("/")
+                ? page.path.slice(0, -1)
+                : page.path // Remove trailing slash
+              const slug = path.replace(/^\//, "") // Remove leading slash
+              return {
+                path: slug,
+                lastmod: blogPostMap.get(slug) || new Date().toISOString(),
+              }
             })
 
-          return [...postPages, ...otherPages]
+          // Remove duplicates
+          const uniquePages = Array.from(
+            new Map(pages.map(page => [page.path, page])).values()
+          )
+
+          return uniquePages
         },
         serialize: ({ path, lastmod }) => {
           return {
